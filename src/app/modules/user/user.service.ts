@@ -15,7 +15,12 @@ const findSingleUserInDb = async (userId: string) => {
 // for create user
 const createUserInDb = async (user: User) => {
   const result = await UserModel.create(user);
+  return result;
+};
 
+// for find single user
+const updateSingleUserInDb = async (userId: string) => {
+  const result = await UserModel.findOne({ _id: userId });
   return result;
 };
 
@@ -23,4 +28,5 @@ export const UserService = {
   createUserInDb,
   findUserInDb,
   findSingleUserInDb,
+  updateSingleUserInDb,
 };
