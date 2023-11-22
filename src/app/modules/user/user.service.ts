@@ -19,8 +19,8 @@ const createUserInDb = async (user: User) => {
 };
 
 // for find single user
-const updateSingleUserInDb = async (userId: string) => {
-  const result = await UserModel.findOne({ _id: userId });
+const updateSingleUserInDb = async (userId: string, detils: User) => {
+  const result = await UserModel.updateOne({ _id: userId }, { $set: detils });
   return result;
 };
 

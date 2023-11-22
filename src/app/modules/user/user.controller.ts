@@ -67,8 +67,9 @@ const createUser = async (req: Request, res: Response) => {
 const updateSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    console.log(userId);
-    const result = await UserService.updateSingleUserInDb(userId);
+
+    const result = await UserService.updateSingleUserInDb(userId, req.body);
+    console.log(result);
     res.status(200).json({
       success: true,
       message: 'User fetched successfully!',
