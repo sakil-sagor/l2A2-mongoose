@@ -24,9 +24,16 @@ const updateSingleUserInDb = async (userId: string, detils: User) => {
   return result;
 };
 
+// for find single user
+const deleteSingleUserInDb = async (userId: string) => {
+  const result = await UserModel.deleteOne({ _id: userId });
+  return result;
+};
+
 export const UserService = {
   createUserInDb,
   findUserInDb,
   findSingleUserInDb,
   updateSingleUserInDb,
+  deleteSingleUserInDb,
 };

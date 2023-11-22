@@ -67,6 +67,11 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+// userSchema.pre('findOneAndUpdate', async function() {
+//   const docToUpdate = await this.model.findOne(this.getQuery());
+//   console.log(docToUpdate); // The document that `findOneAndUpdate()` will modify
+// });
+
 userSchema.post('save', async function (doc, next) {
   doc.password = '';
   next();
