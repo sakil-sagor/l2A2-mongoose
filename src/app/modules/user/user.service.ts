@@ -2,7 +2,14 @@ import { Order, User } from './user.interface';
 import { UserModel } from './user.model';
 // for find users
 const findUserInDb = async () => {
-  const result = await UserModel.find({}).select({ username: 1, fullName: 1 });
+  const result = await UserModel.find({}).select({
+    username: 1,
+    fullName: 1,
+    age: 1,
+    email: 1,
+    address: 1,
+    _id: 0,
+  });
   return result;
 };
 // for find single user
