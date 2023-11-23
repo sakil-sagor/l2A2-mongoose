@@ -38,6 +38,14 @@ const createOrderInUser = async (userId: string, orderInfo: Order) => {
   );
   return result;
 };
+// find all order specific user
+const findAllOrderSingleUserInDb = async (userId: string) => {
+  const result = await UserModel.find({ _id: userId }).select({
+    orders: 1,
+    _id: 0,
+  });
+  return result;
+};
 
 export const UserService = {
   createUserInDb,
@@ -46,4 +54,5 @@ export const UserService = {
   updateSingleUserInDb,
   deleteSingleUserInDb,
   createOrderInUser,
+  findAllOrderSingleUserInDb,
 };
