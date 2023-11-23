@@ -58,6 +58,7 @@ const userSchema = new Schema<User>({
       productName: { type: String },
       price: { type: Number },
       quantity: { type: Number },
+      _id: false,
     },
   ],
 });

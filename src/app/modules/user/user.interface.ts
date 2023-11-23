@@ -21,3 +21,9 @@ export type User = {
     quantity: number;
   }>;
 };
+
+export type Order = {
+  productName: string;
+  price: number;
+  quantity: number;
+};
