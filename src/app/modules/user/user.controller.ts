@@ -67,9 +67,9 @@ const createUser = async (req: Request, res: Response) => {
 const updateSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-
+    console.log('update user');
     const result = await UserService.updateSingleUserInDb(userId, req.body);
-    console.log(result);
+
     res.status(200).json({
       success: true,
       message: 'User updated successfully!',
@@ -111,10 +111,36 @@ const deleteSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+//make order for new product
+const orderProduct = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+
+    // const result = await UserService.createOrderInUser(userId);
+    console.log('update product');
+    console.log(userId);
+    res.status(200).json({
+      success: true,
+      message: 'User deleted successfully!',
+      data: result,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
+};
+
 export const UserController = {
   createUser,
   getUsers,
   getSingleUser,
   updateSingleUser,
   deleteSingleUser,
+  orderProduct,
 };

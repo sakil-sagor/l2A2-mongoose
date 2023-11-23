@@ -30,10 +30,17 @@ const deleteSingleUserInDb = async (userId: string) => {
   return result;
 };
 
+// for find single user
+const createOrderInUser = async (userId: string) => {
+  // const result = await UserModel.deleteOne({ _id: userId });
+  // return result;
+};
+
 export const UserService = {
   createUserInDb,
   findUserInDb,
   findSingleUserInDb,
   updateSingleUserInDb,
   deleteSingleUserInDb,
+  createOrderInUser,
 };
