@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { UserService } from './user.service';
-import { userValidationbyZod } from './user.validation';
+import { orderSchema, userValidationbyZod } from './user.validation';
 
 // find all users
 const getUsers = async (req: Request, res: Response) => {
@@ -24,8 +24,8 @@ const getUsers = async (req: Request, res: Response) => {
 const getSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    console.log(userId);
-    const result = await UserService.findSingleUserInDb(userId);
+
+    const result = await UserService.findSingleUserInDb(parseInt(userId));
     res.status(200).json({
       success: true,
       message: 'User fetched successfully!',
@@ -34,10 +34,10 @@ const getSingleUser = async (req: Request, res: Response) => {
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: 'User not found',
+      message: err.message || 'something went wrong',
       error: {
         code: 404,
-        description: 'User not found!',
+        description: err.message || 'something went wrong',
       },
     });
   }
@@ -51,7 +51,7 @@ const createUser = async (req: Request, res: Response) => {
     const zodParseData = userValidationbyZod.parse(user);
 
     const result = await UserService.createUserInDb(zodParseData);
-    const { password, orders, ...userData } = result.toObject();
+    const { password, orders, _id, ...userData } = result.toObject();
 
     res.status(200).json({
       success: true,
@@ -67,12 +67,17 @@ const createUser = async (req: Request, res: Response) => {
   }
 };
 
-// update single users
+// update single user
 const updateSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    console.log('update user');
-    const result = await UserService.updateSingleUserInDb(userId, req.body);
+    const user = req.body;
+    // data validation using zod
+    const zodParseData = userValidationbyZod.parse(user);
+    const result = await UserService.updateSingleUserInDb(
+      parseInt(userId),
+      zodParseData,
+    );
 
     res.status(200).json({
       success: true,
@@ -82,34 +87,34 @@ const updateSingleUser = async (req: Request, res: Response) => {
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: 'User not found',
+      message: err.message || 'something went wrong',
       error: {
         code: 404,
-        description: 'User not found!',
+        description: err.message || 'something went wrong',
       },
     });
   }
 };
 
-// update single users
+// delete single user
 const deleteSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
 
-    const result = await UserService.deleteSingleUserInDb(userId);
+    const result = await UserService.deleteSingleUserInDb(parseInt(userId));
 
     res.status(200).json({
       success: true,
       message: 'User deleted successfully!',
-      data: result,
+      data: result.deletedCount == 1 && null,
     });
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: 'User not found',
+      message: err.message || 'something went wrong',
       error: {
         code: 404,
-        description: 'User not found!',
+        description: err.message || 'something went wrong',
       },
     });
   }
@@ -119,8 +124,16 @@ const deleteSingleUser = async (req: Request, res: Response) => {
 const orderProduct = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
+    console.log(userId);
     const orderInfo = req.body;
-    const result = await UserService.createOrderInUser(userId, orderInfo);
+    const zodParseData = orderSchema.parse(orderInfo);
+    console.log(orderInfo);
+    console.log(zodParseData);
+
+    const result = await UserService.createOrderInUser(
+      parseInt(userId),
+      zodParseData,
+    );
 
     res.status(200).json({
       success: true,
@@ -130,10 +143,10 @@ const orderProduct = async (req: Request, res: Response) => {
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: 'User not found',
+      message: err.message || 'something went wrong',
       error: {
         code: 404,
-        description: 'User not found!',
+        description: err.message || 'something went wrong',
       },
     });
   }
@@ -142,7 +155,9 @@ const orderProduct = async (req: Request, res: Response) => {
 const allOrdersForSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    const result = await UserService.findAllOrderSingleUserInDb(userId);
+    const result = await UserService.findAllOrderSingleUserInDb(
+      parseInt(userId),
+    );
     res.status(200).json({
       success: true,
       message: 'Order fetched successfully!',
@@ -151,8 +166,11 @@ const allOrdersForSingleUser = async (req: Request, res: Response) => {
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: err.message || 'Something went wrong',
-      error: err,
+      message: err.message || 'something went wrong',
+      error: {
+        code: 404,
+        description: err.message || 'something went wrong',
+      },
     });
   }
 };
@@ -160,7 +178,7 @@ const allOrdersForSingleUser = async (req: Request, res: Response) => {
 const totalPriceSpecificUserOrders = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    const result = await UserService.calculateTotalPriceUser(userId);
+    const result = await UserService.calculateTotalPriceUser(parseInt(userId));
 
     res.status(200).json({
       success: true,
@@ -170,8 +188,11 @@ const totalPriceSpecificUserOrders = async (req: Request, res: Response) => {
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: err.message || 'Something went wrong',
-      error: err,
+      message: err.message || 'something went wrong',
+      error: {
+        code: 404,
+        description: err.message || 'something went wrong',
+      },
     });
   }
 };

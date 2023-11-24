@@ -21,14 +21,7 @@ const userSchema = new Schema<TUser, UserModel>({
   fullName: {
     firstName: {
       type: String,
-      //   required: [true, 'Name is required'],
-      //   validate: {
-      //     validator: function (value: string) {
-      //       const firstNameStr = value.charAt(0).toUpperCase() + value.slice(1);
-      //       return firstNameStr === value;
-      //     },
-      //     message: '{VALUE} is not in capitalization format',
-      //   },
+      required: true,
     },
     lastName: {
       type: String,
