@@ -6,7 +6,7 @@ export type TUser = {
   password: string;
   fullName: {
     firstName: string;
-    lastName: string;
+    lastName?: string;
   };
   age: number;
   email: string;
@@ -17,7 +17,7 @@ export type TUser = {
     city: string;
     country: string;
   };
-  orders: Array<{
+  orders?: Array<{
     productName: string;
     price: number;
     quantity: number;

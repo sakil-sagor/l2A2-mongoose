@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { UserService } from './user.service';
+import { userValidationbyZod } from './user.validation';
 
 // find all users
 const getUsers = async (req: Request, res: Response) => {
@@ -46,7 +47,10 @@ const getSingleUser = async (req: Request, res: Response) => {
 const createUser = async (req: Request, res: Response) => {
   try {
     const user = req.body;
-    const result = await UserService.createUserInDb(user);
+    // data validation using zod
+    const zodParseData = userValidationbyZod.parse(user);
+
+    const result = await UserService.createUserInDb(zodParseData);
     const { password, orders, ...userData } = result.toObject();
 
     res.status(200).json({

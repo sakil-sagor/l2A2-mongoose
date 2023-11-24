@@ -36,9 +36,11 @@ const userSchema = new Schema<TUser, UserModel>({
   },
   age: {
     type: Number,
+    required: true,
   },
   email: {
     type: String,
+    required: true,
   },
   isActive: {
     type: Boolean,
@@ -47,12 +49,13 @@ const userSchema = new Schema<TUser, UserModel>({
   hobbies: [
     {
       type: String,
+      required: true,
     },
   ],
   address: {
-    street: { type: String },
-    city: { type: String },
-    country: { type: String },
+    street: { type: String, required: true },
+    city: { type: String, required: true },
+    country: { type: String, required: true },
   },
   orders: [
     {
