@@ -152,6 +152,25 @@ const allOrdersForSingleUser = async (req: Request, res: Response) => {
     });
   }
 };
+// find all orders for single user
+const totalPriceSpecificUserOrders = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const result = await UserService.calculateTotalPriceUser(userId);
+
+    res.status(200).json({
+      success: true,
+      message: 'Total price calculated successfully!',
+      data: result,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || 'Something went wrong',
+      error: err,
+    });
+  }
+};
 
 export const UserController = {
   createUser,
@@ -161,4 +180,5 @@ export const UserController = {
   deleteSingleUser,
   orderProduct,
   allOrdersForSingleUser,
+  totalPriceSpecificUserOrders,
 };

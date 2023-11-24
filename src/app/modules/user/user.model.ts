@@ -1,17 +1,18 @@
 import bcrypt from 'bcrypt';
 import { Schema, model } from 'mongoose';
 import config from '../../config';
-import { User } from './user.interface';
+import { TUser, UserModel } from './user.interface';
 
-const userSchema = new Schema<User>({
+const userSchema = new Schema<TUser, UserModel>({
   userId: {
     type: Number,
     required: [true, 'User id is required'],
+    unique: true,
   },
   username: {
     type: String,
     required: [true, 'username id is required'],
-    // unique: true,
+    unique: true,
   },
   password: {
     type: String,
@@ -68,14 +69,14 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-// userSchema.pre('findOneAndUpdate', async function() {
-//   const docToUpdate = await this.model.findOne(this.getQuery());
-//   console.log(docToUpdate); // The document that `findOneAndUpdate()` will modify
-// });
-
 userSchema.post('save', async function (doc, next) {
   doc.password = '';
   next();
 });
 
-export const UserModel = model<User>('User', userSchema);
+userSchema.statics.isUserExists = async function (userId: number) {
+  const existingUser = await User.findOne({ userId });
+  return existingUser;
+};
+
+export const User = model<TUser, UserModel>('User', userSchema);

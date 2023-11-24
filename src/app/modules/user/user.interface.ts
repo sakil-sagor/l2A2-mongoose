@@ -1,4 +1,6 @@
-export type User = {
+import { Model } from 'mongoose';
+
+export type TUser = {
   userId: number;
   username: string;
   password: string;
@@ -27,3 +29,8 @@ export type Order = {
   price: number;
   quantity: number;
 };
+
+// create static
+export interface UserModel extends Model<TUser> {
+  isUserExists(id: number): Promise<TUser | null>;
+}
