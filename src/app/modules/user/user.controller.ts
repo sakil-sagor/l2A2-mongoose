@@ -124,11 +124,9 @@ const deleteSingleUser = async (req: Request, res: Response) => {
 const orderProduct = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    console.log(userId);
+
     const orderInfo = req.body;
     const zodParseData = orderSchema.parse(orderInfo);
-    console.log(orderInfo);
-    console.log(zodParseData);
 
     const result = await UserService.createOrderInUser(
       parseInt(userId),
